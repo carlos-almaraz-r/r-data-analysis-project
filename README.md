@@ -8,18 +8,22 @@ Project Objectives
   Evaluate model performance and assumptions
   Generate insights for business decision‑making
 
-  Repository Structure
+## Repository Structure
   r-data-analysis-project/
 │
 ├── scripts/
-│   └── revenue_model.R        # Main R analysis script
+│   └── revenue_model.R
 │
-├── data/                      # (Optional) Dataset storage
+├── data/
+│   ├── order_july25.csv
+│   └── new_customer25.csv
 │
-├── results/                   # (Optional) Outputs, plots, tables
+├── results/
+│   └── .gitkeep
 │
-├── README.md                  # Project documentation
-└── COURSEWORK.md              # Coursework declaration
+├── README.md
+├── COURSEWORK.md
+└── LICENSE
 
 
 Technologies Used
