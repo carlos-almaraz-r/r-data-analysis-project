@@ -36,3 +36,10 @@ How to Run the Analysis
 Coursework Notice
 This project was submitted as part of the academic requirements for the MSc Business Analytics & Decision Sciences at the University of Leeds.
 It is shared publicly for portfolio and professional demonstration purposes, with permission from the module leader.
+
+
+## Dependencies
+This project uses the following R packages:
+ggplot2, ggthemes, corrgram, corrplot, ggcorrplot, VIM, scales, dplyr, mice, misty,
+fastcluster, NbClust, cluster, MCDA, goalp, lmtest, sandwich
+
