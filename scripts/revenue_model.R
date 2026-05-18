@@ -41,8 +41,8 @@ library(sandwich)
 # 2. Load Data
 # -----------------------------------------------------------
 
-orders <- read.csv("order_july25.csv")
-customers <- read.csv("new_customer25.csv")
+orders <- read.csv("data/order_july25.csv")
+customers <- read.csv("data/new_customer25.csv")
 
 # -----------------------------------------------------------
 # 3. Data Understanding & Descriptive Statistics
