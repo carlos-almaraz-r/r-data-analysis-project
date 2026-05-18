@@ -1,29 +1,53 @@
-##Libraries to analyze the data##
-##Visualization##
-library("ggplot2")
-library("ggthemes")
-library("corrgram")
-library("corrplot")
-library("ggcorrplot")
-library("VIM")
-library("scales")
-##Data management and order##
-library("dplyr")
-library("mice")
-library("misty")
-##Clustering and Multivariate##
-library("fastcluster")
-library("NbClust")
-library("cluster")
-##MCDA and decision making##
-library("MCDA")
-library("goalp")
-library('lmtest')
-##Load data sheets for analysis##
-orders<-read.csv("order_july25.csv")
-customers<-read.csv("new_customer25.csv")
+# -----------------------------------------------------------
+# Customer Revenue Modelling – R Analysis Script
+# MSc Business Analytics & Decision Sciences – University of Leeds
+# Author: Carlos Almaraz Rosales
+# Description: End-to-end workflow including data cleaning, EDA,
+#              regression modelling, diagnostics, and prediction.
+# -----------------------------------------------------------
 
-##Data understanding##
+# -----------------------------------------------------------
+# 1. Load Libraries
+# -----------------------------------------------------------
+
+## Visualization
+library(ggplot2)
+library(ggthemes)
+library(corrgram)
+library(corrplot)
+library(ggcorrplot)
+library(VIM)
+library(scales)
+
+## Data management
+library(dplyr)
+library(mice)
+library(misty)
+
+## Clustering & multivariate
+library(fastcluster)
+library(NbClust)
+library(cluster)
+
+## MCDA & decision making
+library(MCDA)
+library(goalp)
+
+## Modelling & diagnostics
+library(lmtest)
+library(sandwich)
+
+# -----------------------------------------------------------
+# 2. Load Data
+# -----------------------------------------------------------
+
+orders <- read.csv("order_july25.csv")
+customers <- read.csv("new_customer25.csv")
+
+# -----------------------------------------------------------
+# 3. Data Understanding & Descriptive Statistics
+# -----------------------------------------------------------
+
 #Check and clean data for the customer behavior#
 #we check our data after cleaning and transforming#
 str(orders)
@@ -39,6 +63,11 @@ table(orders$voucher)
 prop.table(table(orders$voucher))
 table(orders$ad_channel)
 prop.table(table(orders$ad_channel))
+
+
+# -----------------------------------------------------------
+# 4. Exploratory Data Analysis (EDA)
+# -----------------------------------------------------------
 
 # Leeds pallete color#
 leeds_palette <- c(
@@ -178,17 +207,6 @@ ggplot(orders[!is.na(orders$past_spend), ], aes(x = past_spend)) +
 table(orders$past_spend)
 summary(orders$past_spend)
 
-ggplot(orders, aes(x=factor(ad_channel)))+
-  geom_bar(fill="steelblue") +
-  scale_x_discrete(
-    labels=c("1"="No Ads", "2"="Paid Search",
-             "3"="Free SEO", "4"="Online Ads"),
-    na.translate=FALSE #do not show NA results
-  ) +
-  labs(title = "Which advertisment medium was used?",
-       caption = "Data from SweetAroma",
-       x = "",y = "Number of Customers") +
-  theme_economist()
 
 ggplot(orders %>% filter(!is.na(ad_channel)), aes(x = factor(ad_channel))) +
   geom_bar(fill = "#1FA77C", color = "#1FA2A6") +
@@ -223,6 +241,7 @@ ggplot(orders[!is.na(orders$revenue), ], aes(x = revenue)) +
     y       = "Number of transactions"
   ) +
   theme_leeds
+
 
 #we create a copy of the dataframe to have factors and numbers for graphs#
 orders_corr<-orders
@@ -399,7 +418,11 @@ ggplot(data=dataplot) + geom_point(aes(x=time_web, y=revenue,color=number_past_o
        caption = "Data from SweetAroma",tag = "Figure ",
        x = "Time on web",y = "Revenue")
 
-##Data preparation##
+
+# -----------------------------------------------------------
+# 5. Missing Data Analysis & Data Preparation
+# -----------------------------------------------------------
+
 #We want to check missing data#
 colSums(is.na(orders))
 aggr(orders_corr, numbers=TRUE, prop=FALSE, 
@@ -427,6 +450,11 @@ neworders <- cbind(neworders, orders_dummy[, -1])
 str(neworders)
 neworders$voucher <- NULL 
 neworders$ad_channel <- NULL
+
+# -----------------------------------------------------------
+# 6. Correlation Analysis
+# -----------------------------------------------------------
+
 #we check the final data frame for the model#
 cor_data<-cor(neworders) 
 round(cor_data, 2)
@@ -443,7 +471,10 @@ corrplot(cor_data,
 
 
 
-##Modelling##
+# -----------------------------------------------------------
+# 7. Regression Modelling & Assumption Testing
+# -----------------------------------------------------------
+
 model1 <- lm(revenue ~ number_past_order + 
                time_web + past_spend + voucher1 + 
                ad_channel2 + ad_channel3 + ad_channel4, 
@@ -517,7 +548,10 @@ pf(summary(model1)$fstatistic[1],
    lower.tail = FALSE)
 sqrt(mean(residuals(model1)^2))
 
-##Prediction##
+# -----------------------------------------------------------
+# 8. Prediction for New Customers
+# -----------------------------------------------------------
+
 #prepare new dataset#
 new_customers<-customers
 names(new_customers)[names(new_customers)=="voucher"]<-"voucher1"
