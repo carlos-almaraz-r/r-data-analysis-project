@@ -9,7 +9,9 @@ Project Objectives
   Generate insights for business decision‑making
 
 ## Repository Structure
-  r-data-analysis-project/
+
+```
+r-data-analysis-project/
 │
 ├── scripts/
 │   └── revenue_model.R
@@ -23,7 +25,10 @@ Project Objectives
 │
 ├── README.md
 ├── COURSEWORK.md
-└── LICENSE
+├── LICENSE
+└── .gitignore
+```
+
 
 
 Technologies Used
